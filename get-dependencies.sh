@@ -31,6 +31,7 @@ echo "$VERSION" > ~/version
 
 mkdir -p ./AppDir/bin
 cd ./REDRIVER2/src_rebuild
+sed -i "s/'uses'/'rd2_uses'/g" src_rebuild/premake_modules/usage/usage.lua
 premake5 gmake
 make config=release_x64 -j$(nproc)
 mv -v REDRIVER2 ../AppDir/bin
