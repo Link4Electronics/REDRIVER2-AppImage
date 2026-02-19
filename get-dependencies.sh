@@ -9,6 +9,7 @@ echo "---------------------------------------------------------------"
 pacman -Syu --noconfirm \
     libdecor      \
     libjpeg-turbo \
+    lua           \
     sdl2          \
     openal        \
     premake
@@ -30,7 +31,7 @@ echo "$VERSION" > ~/version
 
 mkdir -p ./AppDir/bin
 cd ./REDRIVER2/src_rebuild
-premake5 gmake2
+premake5 gmake
 mv -v REDRIVER2 ../AppDir/bin
 cd ..
 cp -f .flatpak/io.github.opendriver2.Redriver2.desktop ../AppDir
