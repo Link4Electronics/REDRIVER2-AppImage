@@ -59,8 +59,7 @@ else
 fi
 mv -v ../bin/Release/* ../../../AppDir/bin
 cd ../..
-cp -f .flatpak/io.github.opendriver2.Redriver2.desktop ../AppDir
-cp -f .flatpak/icon.png ../AppDir
+cp -f .flatpak/icon.png ../AppDir/REDRIVER2.png
 cp -r data/DRIVER2 ../AppDir/bin
 cp -f data/config.ini ../AppDir/bin
 cp -f data/cutscene_recorder.ini ../AppDir/bin
