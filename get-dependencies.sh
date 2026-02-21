@@ -29,8 +29,8 @@ git clone --branch develop-SoapyMan --single-branch --recursive --depth 1 "$REPO
 echo "$VERSION" > ~/version
 
 mkdir -p ./AppDir/bin
-wget https://github.com/premake/premake-core/releases/download/v5.0.0-beta1/premake-5.0.0-beta1-linux.tar.gz -Lo premake5.tar.gz
-tar xvf premake5.tar.gz
+wget https://github.com/premake/premake-core/releases/download/v5.0.0-beta1/premake-5.0.0-beta1-linux.tar.gz -O premake5.tar.gz
+bsdtar -xvf premake5.tar.gz
 rm -f *.gz
 chmod +x premake5
 mv premake5 /usr/local/bin
