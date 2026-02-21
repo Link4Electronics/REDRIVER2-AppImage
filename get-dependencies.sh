@@ -48,7 +48,7 @@ sed -i 's/libdirs {/libdirs {\n\t\t"PsyCross\/bin\/Release",\n\t\t"PsyCross\/bin
 if [ "$ARCH" = "aarch64" ]; then
     # Add arm64 to the allowed platforms and run for that platform
     sed -i 's/platforms { "x86", "x64" }/platforms { "x86", "x64", "arm64" }/g' premake5.lua
-    sed -i '/filter "system:Linux"/a \ \ \ \ \ \ \ \ defines { "PSX_LIB_STRICT" }\n\ \ \ \ \ \ \ \ buildoptions { "-fpack-struct=4", "-fpermissive", "-Wno-error=format-loses-precision" }' premake5.lua
+    sed -i '/filter "system:Linux"/a \ \ \ \ \ \ \ \ buildoptions { "-fpack-struct=4", "-fpermissive", "-flax-vector-conversions" }' premake5.lua
     premake5 gmake
     cd build
     make config=release_arm64 -j$(nproc)
