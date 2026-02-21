@@ -36,9 +36,7 @@ echo "$VERSION" > ~/version
 #mv -v premake5 /usr/local/bin
 
 mkdir -p ./AppDir/bin
-cd ./REDRIVER2
-git submodule update --init --recursive --remote
-cd src_rebuild
+cd ./REDRIVER2/src_rebuild
 sed -i 's/require "premake_modules\/usage"/-- require "premake_modules\/usage"/g' premake5.lua
 sed -i 's/\bconfiguration\b/filter/g' premake5.lua
 sed -i 's/includedirs {/includedirs {\n\t\t"PsyCross\/include",\n\t\t"PsyCross\/include\/psx",\n\t\t"PsyCross\/include\/PsyX",/g' premake5.lua
