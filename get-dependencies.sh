@@ -32,15 +32,14 @@ echo "$VERSION" > ~/version
 wget https://github.com/premake/premake-core/releases/download/v5.0.0-beta1/premake-5.0.0-beta1-linux.tar.gz -O premake5.tar.gz
 bsdtar -xvf premake5.tar.gz
 rm -f *.gz
-chmod +x premake5
-mv premake5 /usr/local/bin
+mv -v premake5 /usr/local/bin
 
 mkdir -p ./AppDir/bin
 cd ./REDRIVER2/src_rebuild
 premake5 gmake
 cd build
 make config=release_x64 -j$(nproc)
-mv -v ../bin/Release/REDRIVER2 ../../AppDir/bin
+mv -v ../bin/Release/* ../../../AppDir/bin
 cd ../..
 cp -f .flatpak/io.github.opendriver2.Redriver2.desktop ../AppDir
 cp -f .flatpak/icon.png ../AppDir
