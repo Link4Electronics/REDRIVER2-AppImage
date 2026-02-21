@@ -40,8 +40,8 @@ cd ./REDRIVER2/src_rebuild
 premake5 gmake
 cd build
 make config=release_x64 -j$(nproc)
-mv -v REDRIVER2 ../AppDir/bin
-cd ..
+mv -v REDRIVER2 ../../AppDir/bin
+cd ../..
 cp -f .flatpak/io.github.opendriver2.Redriver2.desktop ../AppDir
 cp -f .flatpak/icon.png ../AppDir
 cp -r data/DRIVER2 ../AppDir/bin
