@@ -64,6 +64,9 @@ EOF
     find PsyCross/include/psx/ -name "*.h" -exec sed -i 's/void\s*\*.*tag;/uint32_t tag;/g' {} +
     find PsyCross/include/psx/ -name "*.h" -exec sed -i 's/#define P_LEN.*/#define P_LEN (0)/g' {} +
     sed -i 's/(int)vsync_callback/(uintptr_t)vsync_callback/g' PsyCross/src/psx/LIBETC.C
+    find PsyCross/src/psx/ -name "*.C" -exec sed -i 's/unsigned long Get/unsigned int Get/g' {} +
+    find PsyCross/src/psx/ -name "*.C" -exec sed -i 's/unsigned long Cd/unsigned int Cd/g' {} +
+    sed -i 's/unsigned long/unsigned int/g' PsyCross/src/psx/LIBAPI.C
 
     premake5 gmake
     cd build
