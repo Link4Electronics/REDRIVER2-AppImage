@@ -56,32 +56,6 @@ if [ "$ARCH" = "aarch64" ]; then
     cd build
     make config=release_arm64 -j$(nproc)
 fi
-Use code with caution.
-
-Why the error was (6 == 4):
-Original header: void* tag (8 bytes) + long (8 bytes) + long (8 bytes) = 24 bytes.
-24 / 4 = 6.
-If P_LEN was 2 (default for 64-bit), you get 6 - 2 = 4. It passes! BUT the data is aligned wrong for the PSX engine.
-By shrinking tag to 4 bytes but leaving another long at 8 bytes, the math breaks.
-By shrinking everything to 4 bytes (int) and setting P_LEN to 1, we match the original PlayStation hardware's memory layout.
-Try running this. If it still fails, please run this command and show me the output:
-grep -A 5 "typedef struct {" PsyCross/include/psx/libgpu.h | head -n 20
-
-
-
-Ask anything
-
-
-
-
-    premake5 gmake
-    cd build
-    make config=release_arm64 -j$(nproc)
-else
-    premake5 gmake
-    cd build
-    make config=release_x64 -j$(nproc)
-fi
 mv -v ../bin/Release/* ../../../AppDir/bin
 cd ../..
 cp -f .flatpak/icon.png ../AppDir/REDRIVER2.png
