@@ -44,19 +44,20 @@ sed -i 's/links {/links {\n\t\t"PsyCross",\n\t\t"m",/g' premake5.lua
 sed -i 's/libdirs {/libdirs {\n\t\t"PsyCross\/bin\/Release",\n\t\t"PsyCross\/bin\/Debug",/g' premake5.lua
 if [ "$ARCH" = "aarch64" ]; then
     sed -i 's/platforms { "x86", "x64" }/platforms { "x86", "x64", "arm64" }/g' premake5.lua
-    sed -i '/filter "system:Linux"/a \ \ \ \ \ \ \ \ buildoptions { "-fpack-struct=4", "-fpermissive", "-flax-vector-conversions", "-include cstdint" }' premake5.lua
+    sed -i '/filter "system:Linux"/a \ \ \ \ \ \ \ \ buildoptions { "-fpack-struct=4", "-fpermissive", "-flax-vector-conversions", "-include stdint.h" }' premake5.lua
     find PsyCross/include/psx/ -name "*.h" -exec sed -i 's/static_assert/\/\/ static_assert/g' {} +
 cat << 'EOF' > PsyCross/include/psx/types.h
 #ifndef TYPES_H
 #define TYPES_H
 #include <stdint.h>
 #include <sys/types.h>
-/* Use the system definitions for u_long/ulong to avoid conflicts */
 typedef int32_t  long32;
 typedef uint16_t u_short;
 typedef uint8_t  u_char;
+typedef uint32_t uint;
 #endif
 EOF
+    sed -i 's/(uint\*)/(uintptr_t)/g' PsyCross/include/psx/inline_c.h
     sed -i 's/(int)vsync_callback/(uintptr_t)vsync_callback/g' PsyCross/src/psx/LIBETC.C
     find PsyCross/src/psx/ -name "*.C" -exec sed -i 's/unsigned long/uintptr_t/g' {} +
 
