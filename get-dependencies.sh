@@ -51,22 +51,20 @@ cat << 'EOF' > PsyCross/include/psx/types.h
 #include <stdint.h>
 #include <sys/types.h>
 
-/* Use macros to force 32-bit without colliding with system typedefs */
 #define u_long uint32_t
 #define ulong  uint32_t
 #define long32 int32_t
 
-typedef unsigned short u_short;
-typedef unsigned char  u_char;
+typedef uint16_t u_short;
+typedef uint8_t  u_char;
 #endif
 EOF
     find PsyCross/include/psx/ -name "*.h" -exec sed -i 's/\blong\b/int/g' {} +
     find PsyCross/include/psx/ -name "*.h" -exec sed -i 's/void\s*\*.*tag;/uint32_t tag;/g' {} +
     find PsyCross/include/psx/ -name "*.h" -exec sed -i 's/#define P_LEN.*/#define P_LEN (0)/g' {} +
+    find PsyCross/src/psx/ -name "*.C" -exec sed -i 's/unsigned long/unsigned int/g' {} +
+    find PsyCross/src/psx/ -name "*.C" -exec sed -i 's/\blong\b/int/g' {} +
     sed -i 's/(int)vsync_callback/(uintptr_t)vsync_callback/g' PsyCross/src/psx/LIBETC.C
-    find PsyCross/src/psx/ -name "*.C" -exec sed -i 's/unsigned long Get/unsigned int Get/g' {} +
-    find PsyCross/src/psx/ -name "*.C" -exec sed -i 's/unsigned long Cd/unsigned int Cd/g' {} +
-    sed -i 's/unsigned long/unsigned int/g' PsyCross/src/psx/LIBAPI.C
 
     premake5 gmake
     cd build
