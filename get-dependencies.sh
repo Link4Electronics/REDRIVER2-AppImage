@@ -45,26 +45,20 @@ sed -i 's/libdirs {/libdirs {\n\t\t"PsyCross\/bin\/Release",\n\t\t"PsyCross\/bin
 if [ "$ARCH" = "aarch64" ]; then
     sed -i 's/platforms { "x86", "x64" }/platforms { "x86", "x64", "arm64" }/g' premake5.lua
     sed -i '/filter "system:Linux"/a \ \ \ \ \ \ \ \ buildoptions { "-fpack-struct=4", "-fpermissive", "-flax-vector-conversions", "-include cstdint" }' premake5.lua
+    find PsyCross/include/psx/ -name "*.h" -exec sed -i 's/static_assert/\/\/ static_assert/g' {} +
 cat << 'EOF' > PsyCross/include/psx/types.h
 #ifndef TYPES_H
 #define TYPES_H
 #include <stdint.h>
 #include <sys/types.h>
-
-#define u_long uint32_t
-#define ulong  uint32_t
-#define long32 int32_t
-
+/* Use the system definitions for u_long/ulong to avoid conflicts */
+typedef int32_t  long32;
 typedef uint16_t u_short;
 typedef uint8_t  u_char;
 #endif
 EOF
-    find PsyCross/include/psx/ -name "*.h" -exec sed -i 's/\blong\b/int/g' {} +
-    find PsyCross/include/psx/ -name "*.h" -exec sed -i 's/void\s*\*.*tag;/uint32_t tag;/g' {} +
-    find PsyCross/include/psx/ -name "*.h" -exec sed -i 's/#define P_LEN.*/#define P_LEN (0)/g' {} +
-    find PsyCross/src/psx/ -name "*.C" -exec sed -i 's/unsigned long/unsigned int/g' {} +
-    find PsyCross/src/psx/ -name "*.C" -exec sed -i 's/\blong\b/int/g' {} +
     sed -i 's/(int)vsync_callback/(uintptr_t)vsync_callback/g' PsyCross/src/psx/LIBETC.C
+    find PsyCross/src/psx/ -name "*.C" -exec sed -i 's/unsigned long/uintptr_t/g' {} +
 
     premake5 gmake
     cd build
