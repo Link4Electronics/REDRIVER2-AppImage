@@ -65,6 +65,10 @@ EOF
     find PsyCross/include/psx/ -name "*.h" -exec sed -i 's/(uint32_t\*)/(uint32_t*)(uintptr_t)/g' {} +
     sed -i 's/(int)vsync_callback/(uintptr_t)vsync_callback/g' PsyCross/src/psx/LIBETC.C
     find PsyCross/src/psx/ -name "*.C" -exec sed -i 's/unsigned long/uintptr_t/g' {} +
+    find . -name "dr2locale.h" -exec sed -i 's/typedef unsigned int u_intptr;/typedef uintptr_t u_intptr;/g' {} +
+    find . -name "*.h" -exec sed -i 's/(int)st/(uintptr_t)st/g' {} +
+    find . -name "*.c" -exec sed -i 's/(int)st/(uintptr_t)st/g' {} +
+    find . -name "FEmain.c" -exec sed -i 's/(void\*)(feVariableSave/(void*)(uintptr_t)(feVariableSave/g' {} +
 
     premake5 gmake
     cd build
