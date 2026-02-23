@@ -71,27 +71,7 @@ EOF
     find . -type f \( -name "*.c" -o -name "*.h" -o -name "*.cpp" -o -name "*.C" \) | xargs sed -i 's/.*asm.*int3.*/\/* int3 removed *\//g'
     find . -type f \( -name "*.c" -o -name "*.h" -o -name "*.cpp" -o -name "*.C" \) | xargs sed -i 's/__asm { int 3 }/\/* int3 removed *\//g'
     find . -name "*.h" -exec sed -i 's/#define BREAKPOINT.*/#define BREAKPOINT/g' {} +
-    find . -type f \( -name "*.c" -o -name "*.h" -o -name "*.C" \) -exec sed -i '1s/^\xEF\xBB\xBF//' {} +
-    find . -name "*.c" -o -name "*.h" | xargs sed -i '1i #define trap(n) \/* trap *\/'
-cat << 'EOF' > PsyCross/include/psx/types.h
-#ifndef TYPES_H
-#define TYPES_H
-#include <stdint.h>
-#include <sys/types.h>
-typedef int32_t  long32;
-typedef uint16_t u_short;
-typedef uint8_t  u_char;
-typedef uint32_t uint;
-#ifndef _U_INT
-#define _U_INT
-typedef uint32_t u_int;
-#endif
-#ifndef _U_LONG
-#define _U_LONG
-typedef uint32_t u_long;
-#endif
-#endif
-EOF
+    find . -name "*.c" -o -name "*.h" | xargs sed -i '1i #define trap(n) \/\* trap \*\/'
 
     premake5 gmake
     cd build
