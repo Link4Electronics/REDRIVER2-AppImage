@@ -55,10 +55,14 @@ typedef int32_t  long32;
 typedef uint16_t u_short;
 typedef uint8_t  u_char;
 typedef uint32_t uint;
+#ifndef _U_INT
+#define _U_INT
+typedef uint32_t u_int;
+#endif
 #endif
 EOF
-    find PsyCross/include/psx/ -name "*.h" -exec sed -i 's/(uint\*)/(uint32_t\*)/g' {} +
-    find PsyCross/include/psx/ -name "*.h" -exec sed -i 's/(uintptr_t)/(uint32_t\*)/g' {} +
+    sed -i 's/(uint32_t\*)((u_int\*)_addr)/(uint32_t)(uintptr_t)(_addr)/g' PsyCross/include/psx/libgpu.h
+    find PsyCross/include/psx/ -name "*.h" -exec sed -i 's/(uint32_t\*)/(uint32_t*)(uintptr_t)/g' {} +
     sed -i 's/(int)vsync_callback/(uintptr_t)vsync_callback/g' PsyCross/src/psx/LIBETC.C
     find PsyCross/src/psx/ -name "*.C" -exec sed -i 's/unsigned long/uintptr_t/g' {} +
 
