@@ -1,3 +1,4 @@
+#!/bin/false
 dir=$HOME/.driver2
 if [ ! -f "dir"/config.dat ]; then
   mkdir -p "$dir"
@@ -5,5 +6,3 @@ if [ ! -f "dir"/config.dat ]; then
   cp "$APPDIR"/bin/cutscene_recorder.ini "$dir"
 fi
 cd "$dir"
-
-exec "$APPDIR"/bin/REDRIVER2 "$@"
