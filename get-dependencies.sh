@@ -48,8 +48,8 @@ if [ "$ARCH" = "aarch64" ]; then
     sed -i 's/typedef long            long32;/typedef int             long32;/g' PsyCross/include/psx/types.h
     sed -i 's/typedef unsigned long   u_long;/typedef unsigned int    u_long;/g' PsyCross/include/psx/types.h
     sed -i 's/typedef unsigned long   ulong;/typedef unsigned int     ulong;/g' PsyCross/include/psx/types.h
-    sed -i 's/void\s*\*.*tag;/unsigned int tag;/g' PsyCross/include/psx/gtemac.h
-    sed -i 's/void\s*\*.*tag;/unsigned int tag;/g' PsyCross/include/psx/libgpu.h
+    find PsyCross/include/psx/ -name "*.h" -exec sed -i 's/void\s*\*.*tag/unsigned int tag/g' {} +
+    find PsyCross/include/psx/ -name "*.h" -exec sed -i 's/#define P_LEN.*/#define P_LEN (1)/g' {} +
     sed -i 's/(int)vsync_callback/(uintptr_t)vsync_callback/g' PsyCross/src/psx/LIBETC.C
 
     premake5 gmake
