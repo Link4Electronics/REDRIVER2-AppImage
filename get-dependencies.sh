@@ -45,6 +45,7 @@ sed -i 's/libdirs {/libdirs {\n\t\t"PsyCross\/bin\/Release",\n\t\t"PsyCross\/bin
 if [ "$ARCH" = "aarch64" ]; then
     sed -i 's/platforms { "x86", "x64" }/platforms { "x86", "x64", "arm64" }/g' premake5.lua
     sed -i '/filter "system:Linux"/a \ \ \ \ \ \ \ \ buildoptions { "-fpack-struct=4", "-fpermissive", "-flax-vector-conversions", "-include stdint.h" }' premake5.lua
+    find . -type f \( -name "*.c" -o -name "*.h" -o -name "*.C" -o -name "*.cpp" \) -exec sed -i '1s/^\xEF\xBB\xBF//' {} +
     find PsyCross/include/psx/ -name "*.h" -exec sed -i 's/static_assert/\/\/ static_assert/g' {} +
 cat << 'EOF' > PsyCross/include/psx/types.h
 #ifndef TYPES_H
@@ -59,6 +60,14 @@ typedef uint32_t uint;
 #define _U_INT
 typedef uint32_t u_int;
 #endif
+#ifndef _U_LONG
+#define _U_LONG
+typedef uint32_t u_long;
+#endif
+#ifndef _ULONG
+#define _ULONG
+typedef uint32_t ulong;
+#endif
 #endif
 EOF
     sed -i 's/(uint32_t\*)((u_int\*)_addr)/(uint32_t)(uintptr_t)(_addr)/g' PsyCross/include/psx/libgpu.h
@@ -71,7 +80,7 @@ EOF
     find . -type f \( -name "*.c" -o -name "*.h" -o -name "*.cpp" -o -name "*.C" \) | xargs sed -i 's/.*asm.*int3.*/\/* int3 removed *\//g'
     find . -type f \( -name "*.c" -o -name "*.h" -o -name "*.cpp" -o -name "*.C" \) | xargs sed -i 's/__asm { int 3 }/\/* int3 removed *\//g'
     find . -name "*.h" -exec sed -i 's/#define BREAKPOINT.*/#define BREAKPOINT/g' {} +
-    find . -name "*.c" -o -name "*.h" | xargs sed -i '1i #define trap(n) \/\* trap \*\/'
+    find . -name "*.c" -o -name "*.h" | xargs sed -i '1i #define trap(n) \/* trap *\/'
 
     premake5 gmake
     cd build
