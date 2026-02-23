@@ -45,7 +45,7 @@ sed -i 's/libdirs {/libdirs {\n\t\t"PsyCross\/bin\/Release",\n\t\t"PsyCross\/bin
 if [ "$ARCH" = "aarch64" ]; then
     sed -i 's/platforms { "x86", "x64" }/platforms { "x86", "x64", "arm64" }/g' premake5.lua
     sed -i '/filter "system:Linux"/a \ \ \ \ \ \ \ \ buildoptions { "-fpack-struct=4", "-fpermissive", "-flax-vector-conversions", "-include cstdint" }' premake5.lua
-    cat <EOF> PsyCross/include/psx/types.h
+    cat << 'EOF' > PsyCross/include/psx/types.h
 #ifndef TYPES_H
 #define TYPES_H
 #include <stdint.h>
