@@ -71,6 +71,7 @@ EOF
     find . -type f \( -name "*.c" -o -name "*.h" -o -name "*.cpp" -o -name "*.C" \) | xargs sed -i 's/.*asm.*int3.*/\/* int3 removed *\//g'
     find . -type f \( -name "*.c" -o -name "*.h" -o -name "*.cpp" -o -name "*.C" \) | xargs sed -i 's/__asm { int 3 }/\/* int3 removed *\//g'
     find . -name "*.h" -exec sed -i 's/#define BREAKPOINT.*/#define BREAKPOINT/g' {} +
+    find . -name "*.c" -o -name "*.h" | xargs sed -i '1i #define trap(n) \/\* trap \*\/'
 
     premake5 gmake
     cd build
