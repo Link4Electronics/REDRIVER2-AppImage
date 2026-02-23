@@ -45,14 +45,33 @@ sed -i 's/libdirs {/libdirs {\n\t\t"PsyCross\/bin\/Release",\n\t\t"PsyCross\/bin
 if [ "$ARCH" = "aarch64" ]; then
     sed -i 's/platforms { "x86", "x64" }/platforms { "x86", "x64", "arm64" }/g' premake5.lua
     sed -i '/filter "system:Linux"/a \ \ \ \ \ \ \ \ buildoptions { "-fpack-struct=4", "-fpermissive", "-flax-vector-conversions", "-include cstdint" }' premake5.lua
-    sed -i '1i #include <stdint.h>' PsyCross/include/psx/types.h
-    sed -i 's/typedef unsigned long   u_long;/#define u_long uint32_t/g' PsyCross/include/psx/types.h
-    sed -i 's/typedef unsigned long   ulong;/#define ulong uint32_t/g' PsyCross/include/psx/types.h
-    sed -i 's/typedef long            long32;/#define long32 int32_t/g' PsyCross/include/psx/types.h
+    cat <EOF> PsyCross/include/psx/types.h
+#ifndef TYPES_H
+#define TYPES_H
+#include <stdint.h>
+#include <sys/types.h>
+
+/* Force PSX types to 32-bit regardless of architecture */
+typedef int32_t  long32;
+typedef uint32_t u_long;
+typedef uint32_t ulong;
+
+/* Standard PSX shortcuts */
+typedef unsigned short u_short;
+typedef unsigned char  u_char;
+
+#ifndef _SIZE_T
+#define _SIZE_T
+typedef long unsigned int size_t;
+#endif
+
+#endif
+EOF
     find PsyCross/include/psx/ -name "*.h" -exec sed -i 's/\blong\b/int/g' {} +
     find PsyCross/include/psx/ -name "*.h" -exec sed -i 's/void\s*\*.*tag;/uint32_t tag;/g' {} +
     find PsyCross/include/psx/ -name "*.h" -exec sed -i 's/#define P_LEN.*/#define P_LEN (0)/g' {} +
     sed -i 's/(int)vsync_callback/(uintptr_t)vsync_callback/g' PsyCross/src/psx/LIBETC.C
+
 
     premake5 gmake
     cd build
