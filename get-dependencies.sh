@@ -45,12 +45,34 @@ sed -i 's/libdirs {/libdirs {\n\t\t"PsyCross\/bin\/Release",\n\t\t"PsyCross\/bin
 if [ "$ARCH" = "aarch64" ]; then
     sed -i 's/platforms { "x86", "x64" }/platforms { "x86", "x64", "arm64" }/g' premake5.lua
     sed -i '/filter "system:Linux"/a \ \ \ \ \ \ \ \ buildoptions { "-fpack-struct=4", "-fpermissive", "-flax-vector-conversions" }' premake5.lua
-    sed -i 's/typedef long            long32;/typedef int             long32;/g' PsyCross/include/psx/types.h
-    sed -i 's/typedef unsigned long   u_long;/typedef unsigned int    u_long;/g' PsyCross/include/psx/types.h
-    sed -i 's/typedef unsigned long   ulong;/typedef unsigned int     ulong;/g' PsyCross/include/psx/types.h
+    find PsyCross/include/psx/ -name "*.h" -exec sed -i 's/typedef long\s*long32/typedef int long32/g' {} +
+    find PsyCross/include/psx/ -name "*.h" -exec sed -i 's/typedef unsigned long\s*u_long/typedef unsigned int u_long/g' {} +
+    find PsyCross/include/psx/ -name "*.h" -exec sed -i 's/typedef unsigned long\s*ulong/typedef unsigned int ulong/g' {} +
     find PsyCross/include/psx/ -name "*.h" -exec sed -i 's/void\s*\*.*tag/unsigned int tag/g' {} +
     find PsyCross/include/psx/ -name "*.h" -exec sed -i 's/#define P_LEN.*/#define P_LEN (1)/g' {} +
     sed -i 's/(int)vsync_callback/(uintptr_t)vsync_callback/g' PsyCross/src/psx/LIBETC.C
+
+    premake5 gmake
+    cd build
+    make config=release_arm64 -j$(nproc)
+fi
+Use code with caution.
+
+Why the error was (6 == 4):
+Original header: void* tag (8 bytes) + long (8 bytes) + long (8 bytes) = 24 bytes.
+24 / 4 = 6.
+If P_LEN was 2 (default for 64-bit), you get 6 - 2 = 4. It passes! BUT the data is aligned wrong for the PSX engine.
+By shrinking tag to 4 bytes but leaving another long at 8 bytes, the math breaks.
+By shrinking everything to 4 bytes (int) and setting P_LEN to 1, we match the original PlayStation hardware's memory layout.
+Try running this. If it still fails, please run this command and show me the output:
+grep -A 5 "typedef struct {" PsyCross/include/psx/libgpu.h | head -n 20
+
+
+
+Ask anything
+
+
+
 
     premake5 gmake
     cd build
