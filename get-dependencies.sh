@@ -52,22 +52,16 @@ cat << 'EOF' > PsyCross/include/psx/types.h
 #define TYPES_H
 #include <stdint.h>
 #include <sys/types.h>
-typedef int32_t  long32;
+
+/* Use macros to force 32-bit sizing without colliding with system typedefs */
+#define u_long uint32_t
+#define ulong  uint32_t
+#define long32 int32_t
+#define u_int  uint32_t
+
 typedef uint16_t u_short;
 typedef uint8_t  u_char;
 typedef uint32_t uint;
-#ifndef _U_INT
-#define _U_INT
-typedef uint32_t u_int;
-#endif
-#ifndef _U_LONG
-#define _U_LONG
-typedef uint32_t u_long;
-#endif
-#ifndef _ULONG
-#define _ULONG
-typedef uint32_t ulong;
-#endif
 #endif
 EOF
     sed -i 's/(uint32_t\*)((u_int\*)_addr)/(uint32_t)(uintptr_t)(_addr)/g' PsyCross/include/psx/libgpu.h
