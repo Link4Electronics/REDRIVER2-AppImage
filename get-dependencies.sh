@@ -57,7 +57,8 @@ typedef uint8_t  u_char;
 typedef uint32_t uint;
 #endif
 EOF
-    sed -i 's/(uint\*)/(uintptr_t)/g' PsyCross/include/psx/inline_c.h
+    find PsyCross/include/psx/ -name "*.h" -exec sed -i 's/(uint\*)/(uint32_t\*)/g' {} +
+    find PsyCross/include/psx/ -name "*.h" -exec sed -i 's/(uintptr_t)/(uint32_t\*)/g' {} +
     sed -i 's/(int)vsync_callback/(uintptr_t)vsync_callback/g' PsyCross/src/psx/LIBETC.C
     find PsyCross/src/psx/ -name "*.C" -exec sed -i 's/unsigned long/uintptr_t/g' {} +
 
