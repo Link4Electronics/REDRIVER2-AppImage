@@ -44,9 +44,11 @@ sed -i 's/links {/links {\n\t\t"PsyCross",\n\t\t"m",/g' premake5.lua
 sed -i 's/libdirs {/libdirs {\n\t\t"PsyCross\/bin\/Release",\n\t\t"PsyCross\/bin\/Debug",/g' premake5.lua
 if [ "$ARCH" = "aarch64" ]; then
     sed -i 's/platforms { "x86", "x64" }/platforms { "x86", "x64", "arm64" }/g' premake5.lua
-    sed -i '/filter "system:Linux"/a \ \ \ \ \ \ \ \ buildoptions { "-fpack-struct=4", "-fpermissive", "-flax-vector-conversions" }' premake5.lua
-    find PsyCross/include/psx/ -name "*.h" -exec sed -i 's/\blong\b/int/g' {} +
-    find PsyCross/include/psx/ -name "*.h" -exec sed -i 's/unsigned\s*int/unsigned int/g' {} +
+    sed -i '/filter "system:Linux"/a \ \ \ \ \ \ \ \ buildoptions { "-fpack-struct=4", "-fpermissive", "-flax-vector-conversions", "-D_SYS_TYPES_H" }' premake5.lua
+    sed -i 's/^typedef.*u_long;/\/\/ typedef u_long removed/g' PsyCross/include/psx/types.h
+    sed -i 's/^typedef.*ulong;/\/\/ typedef ulong removed/g' PsyCross/include/psx/types.h
+    find PsyCross/include/psx/ -name "*.h" -exec sed -i 's/unsigned long/unsigned int/g' {} +
+    find PsyCross/include/psx/ -name "*.h" -exec sed -i 's/long\s\s\s\s\s\s\s\s\s/int         /g' {} +
     find PsyCross/include/psx/ -name "*.h" -exec sed -i 's/void\s*\*.*tag/unsigned int tag/g' {} +
     find PsyCross/include/psx/ -name "*.h" -exec sed -i 's/#define P_LEN.*/#define P_LEN (0)/g' {} +
     sed -i 's/(int)vsync_callback/(uintptr_t)vsync_callback/g' PsyCross/src/psx/LIBETC.C
