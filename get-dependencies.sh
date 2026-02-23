@@ -47,7 +47,8 @@ if [ "$ARCH" = "aarch64" ]; then
     sed -i '/filter "system:Linux"/a \ \ \ \ \ \ \ \ buildoptions { "-fpack-struct=4", "-fpermissive", "-flax-vector-conversions", "-include cstdint" }' premake5.lua
     sed -i 's/typedef unsigned long   u_long;/\/\/ u_long/g' PsyCross/include/psx/types.h
     sed -i 's/typedef unsigned long   ulong;/\/\/ ulong/g' PsyCross/include/psx/types.h
-    sed -i 's/typedef long            long32;/typedef int             long32;/g' PsyCross/include/psx/types.h
+    find PsyCross/include/psx/ -name "*.h" -exec sed -i 's/unsigned long/unsigned int/g' {} +
+    find PsyCross/include/psx/ -name "*.h" -exec sed -i 's/\blong\b/int/g' {} +
     find PsyCross/include/psx/ -name "*.h" -exec sed -i 's/void\s*\*.*tag;/unsigned int tag;/g' {} +
     find PsyCross/include/psx/ -name "*.h" -exec sed -i 's/#define P_LEN.*/#define P_LEN (0)/g' {} +
     sed -i 's/(int)vsync_callback/(uintptr_t)vsync_callback/g' PsyCross/src/psx/LIBETC.C
