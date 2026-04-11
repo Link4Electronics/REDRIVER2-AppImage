@@ -1,4 +1,4 @@
-#!/bin/false
+#!/bin/sh
 dir=$HOME/.driver2
 if [ ! -f "$dir"/config.dat ]; then
   mkdir -p "$dir"
