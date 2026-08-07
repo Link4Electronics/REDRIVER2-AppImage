@@ -6,27 +6,17 @@ ARCH=$(uname -m)
 
 echo "Installing package dependencies..."
 echo "---------------------------------------------------------------"
-pacman -Syu --noconfirm \
-    libdecor      \
-    libjpeg-turbo \
-    lua           \
-    sdl2          \
-    openal        \
-    premake
+pacman -Syu --noconfirm libjpeg-turbo lua sdl2-copmat openal premake
     
 echo "Installing debloated packages..."
 echo "---------------------------------------------------------------"
-get-debloated-pkgs --add-common --prefer-nano
+get-debloated-pkgs --add-common --prefer-nano libdecor-mini
 
-# Comment this out if you need an AUR package
-#make-aur-package PACKAGENAME
-
-# If the application needs to be manually built that has to be done down here
-echo "Making nightly build of REDRIVER2..."
+echo "Building REDRIVER2..."
 echo "---------------------------------------------------------------"
 REPO="https://github.com/OpenDriver2/REDRIVER2"
 VERSION="$(git ls-remote "$REPO" HEAD | cut -c 1-9 | head -1)"
-git clone --branch develop-SoapyMan --single-branch --recursive --depth 1 "$REPO" ./REDRIVER2
+git clone --recursive --depth 1 "$REPO" ./REDRIVER2
 echo "$VERSION" > ~/version
 
 # Only version of premake5 that works with REDRIVER2
@@ -58,5 +48,4 @@ mv -v ../bin/Release/* ../../../AppDir/bin
 cd ../..
 cp -f .flatpak/icon.png ../AppDir/REDRIVER2.png
 cp -r data/DRIVER2 ../AppDir/bin
-cp -f data/config.ini ../AppDir/bin
-cp -f data/cutscene_recorder.ini ../AppDir/bin
+cp -f data/config.ini data/cutscene_recorder.ini ../AppDir/bin
