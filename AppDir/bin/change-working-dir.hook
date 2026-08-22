@@ -1,7 +1,7 @@
 #!/bin/sh
 dir=$HOME/.driver2
+mkdir -p "$dir"
 if [ ! -f "$dir"/config.dat ]; then
-  mkdir -p "$dir"
   cp "$APPDIR"/bin/config.ini "$dir"
   cp "$APPDIR"/bin/cutscene_recorder.ini "$dir"
 fi
