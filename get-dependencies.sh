@@ -53,5 +53,4 @@ mv -v ../bin/Release/* ../../../AppDir/bin
 cd ../..
 cp -f .flatpak/icon.png ../AppDir/REDRIVER2.png
 cp -r data/DRIVER2 ../AppDir/bin
-cp -f data/config.ini ../AppDir/bin
-cp -f data/cutscene_recorder.ini ../AppDir/bin
+cp -f data/config.ini data/cutscene_recorder.ini ../AppDir/bin
