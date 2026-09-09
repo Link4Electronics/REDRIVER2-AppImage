@@ -7,7 +7,6 @@ ARCH=$(uname -m)
 echo "Installing package dependencies..."
 echo "---------------------------------------------------------------"
 pacman -Syu --noconfirm \
-    libdecor      \
     libjpeg-turbo \
     lua           \
     sdl2          \
@@ -16,7 +15,7 @@ pacman -Syu --noconfirm \
     
 echo "Installing debloated packages..."
 echo "---------------------------------------------------------------"
-get-debloated-pkgs --add-common --prefer-nano
+get-debloated-pkgs --add-common --prefer-nano libdecor-mini
 
 echo "Building REDRIVER2..."
 echo "---------------------------------------------------------------"
@@ -85,5 +84,4 @@ mv -v ../bin/Release/* ../../../AppDir/bin
 cd ../..
 cp -f .flatpak/icon.png ../AppDir/REDRIVER2.png
 cp -r data/DRIVER2 ../AppDir/bin
-cp -f data/config.ini ../AppDir/bin
-cp -f data/cutscene_recorder.ini ../AppDir/bin
+cp -f data/config.ini data/cutscene_recorder.ini ../AppDir/bin
